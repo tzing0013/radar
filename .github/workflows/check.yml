@@ -1,0 +1,16 @@
+name: test script
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        architecture: 'arm64'
+    - run: python /home/openeuler/run.sh
