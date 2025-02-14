@@ -13,4 +13,5 @@ jobs:
       with:
         python-version: '3.11'
         architecture: 'arm64'
-    - run: python /home/openeuler/run.sh
+    - run: |
+        /home/openeuler/run.sh
