@@ -1,34 +1,14 @@
 name: test script
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
     runs-on: self-hosted
     steps:
-    - name: Debug environment
+    - uses: actions/checkout@v2
+    - name: test script
       run: |
-        echo "Python versions installed:"
-        pyenv versions
-        which python
-        python --version
-        pip --version
-
-    - name: Check file existence
-      run: ls -l /home/openeuler/test.py
-
-    - name: Ensure file permissions
-      run: chmod +x /home/openeuler/test.py
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        architecture: 'arm64'
-
-    - name: Run Python script
-      run: python /home/openeuler/test.py
+        python /home/openeuler/test.py
