@@ -13,8 +13,3 @@ jobs:
     - name: test script
       run: |
         python /home/openeuler/test.py
-
-    - name: Debug Environment
-      run: |
-        echo "Running on openeuler..."
-        cat /etc/os-release
