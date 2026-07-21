@@ -5,12 +5,12 @@ jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Show a summary table
-        run: |
-          echo "## 📊 构建结果总览" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 模块 | 状态 | 耗时 |" >> $GITHUB_STEP_SUMMARY
-          echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
-          echo "| 前端构建 | ✅ 成功 | 1m 23s |" >> $GITHUB_STEP_SUMMARY
-          echo "| 单元测试 | ✅ 成功 | 45s |" >> $GITHUB_STEP_SUMMARY
-          echo "| API 部署 | ❌ 失败 | - |" >> $GITHUB_STEP_SUMMARY
+    - name: Show a summary table
+      run: |
+        echo "## 📊 构建结果总览" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| 模块 | 状态 | 耗时 |" >> $GITHUB_STEP_SUMMARY
+        echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+        echo "| 前端构建 | ✅ 成功 | 1m 23s |" >> $GITHUB_STEP_SUMMARY
+        echo "| 单元测试 | ✅ 成功 | 45s |" >> $GITHUB_STEP_SUMMARY
+        echo "| API 部署 | ❌ 失败 | - |" >> $GITHUB_STEP_SUMMARY
