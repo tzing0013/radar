@@ -43,6 +43,8 @@ jobs:
       # ─── 4. 缓存文件（仅在未命中时执行 save） ─────────────────────
       - name: Save to cache
         uses: actions/cache/save@v4
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           path: ./my-cache/data.json
           key: my-cache-key-${{ hashFiles('**/lockfile') }}
