@@ -32,11 +32,12 @@ jobs:
 
       # ─── 3B. 缓存未命中 → 重新写入文件 ─────────────────────────────
       - name: Write file (cache miss)
-        if: steps.cache-restore.outputs.cache-hit != 'true'
+        if: steps.cache-restore.outputs.cache-hit == 'true'
         run: |
           echo "⚠️ 缓存恢复失败，正在创建新文件..."
           mkdir -p ./my-cache
-          echo '{"count": 0, "updated_at": "", "note": "initialized"}' > ./my-cache/data.json
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo '{"count": 0, "updated_at": "${TIMESTAMP}", "note": "initialized"}' > ./my-cache/data.json
           echo "📄 初始文件已写入："
           cat ./my-cache/data.json
 
@@ -48,11 +49,3 @@ jobs:
           path: ./my-cache/data.json
           key: my-cache-key-${{ hashFiles('**/lockfile') }}
 
-      # ─── 5. 调试用：上传 artifact ─────────────────────────────────
-      - name: Upload artifact (debug)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cached-data
-          path: ./my-cache/data.json
-          retention-days: 7
