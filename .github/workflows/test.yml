@@ -43,7 +43,6 @@ jobs:
 
       # ─── 4. 缓存文件（仅在未命中时执行 save） ─────────────────────
       - name: Save to cache
-        if: steps.cache-restore.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ./my-cache/data.json
