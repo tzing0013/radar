@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./my-cache/data.json
-          keys: demo-cache-v1
+          key: demo-cache-v1
           lookup-only: false
 
       # ─── 3A. 缓存命中 → 打印缓存内容 ──────────────────────────────
