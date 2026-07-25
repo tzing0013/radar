@@ -6,7 +6,7 @@ on:
       retry:
         description: 是否重试
         required: false
-        default: fasle
+        default: false
         type: boolean   
 
 jobs:
@@ -21,6 +21,7 @@ jobs:
       # ─── 2. 恢复缓存文件 ──────────────────────────────────────────
       - name: Restore cache
         id: cache-restore
+        if: ${{ inputs.retry == true }}
         uses: actions/cache/restore@v4
         with:
           path: ./my-cache/data.json
@@ -50,6 +51,7 @@ jobs:
       # ─── 4. 缓存文件（仅在未命中时执行 save） ─────────────────────
       - name: Save to cache
         uses: actions/cache/save@v4
+        if: ${{ inputs.retry == false }}
         env:
           ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
