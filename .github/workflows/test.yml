@@ -31,8 +31,7 @@ jobs:
           echo "─────────────────────────────"
 
       # ─── 3B. 缓存未命中 → 重新写入文件 ─────────────────────────────
-      - name: Write file (cache miss)
-        if: steps.cache-restore.outputs.cache-hit == 'true'
+      - name: Write file
         run: |
           echo "⚠️ 缓存恢复失败，正在创建新文件..."
           mkdir -p ./my-cache
