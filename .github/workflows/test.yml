@@ -17,8 +17,8 @@ jobs:
         with:
           path: ./my-cache/data.json
           key: my-cache-key-${{ hashFiles('**/lockfile') }}
-          restore-keys: |
-            my-cache-key-
+          restore-keys: demo-cache-v1
+          lookup-only: false
 
       # ─── 3A. 缓存命中 → 打印缓存内容 ──────────────────────────────
       - name: Print cached content (cache hit)
@@ -47,5 +47,5 @@ jobs:
           ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           path: ./my-cache/data.json
-          key: my-cache-key-${{ hashFiles('**/lockfile') }}
+          key: demo-cache-v1
 
