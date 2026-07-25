@@ -1,5 +1,13 @@
 name: Summary Table Demo
-on: push
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      retry:
+        description: 是否重试
+        required: false
+        default: fasle
+        type: boolean   
 
 jobs:
   cache-workflow:
