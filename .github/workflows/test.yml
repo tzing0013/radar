@@ -2,15 +2,57 @@ name: Summary Table Demo
 on: push
 
 jobs:
-  demo:
+  cache-workflow:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Show a summary table
-      run: |
-        echo "## 📊 构建结果总览" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "| 模块 | 状态 | 耗时 |" >> $GITHUB_STEP_SUMMARY
-        echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
-        echo "| 前端构建 | ✅ 成功 | 1m 23s |" >> $GITHUB_STEP_SUMMARY
-        echo "| 单元测试 | ✅ 成功 | 45s |" >> $GITHUB_STEP_SUMMARY
-        echo "| API 部署 | ❌ 失败 | - |" >> $GITHUB_STEP_SUMMARY
+      # ─── 1. Checkout 代码 ───────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ─── 2. 恢复缓存文件 ──────────────────────────────────────────
+      - name: Restore cache
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ./my-cache/data.json
+          key: my-cache-key-${{ hashFiles('**/lockfile') }}
+          restore-keys: |
+            my-cache-key-
+
+      # ─── 3A. 缓存命中 → 打印缓存内容 ──────────────────────────────
+      - name: Print cached content (cache hit)
+        if: steps.cache-restore.outputs.cache-hit == 'true'
+        run: |
+          echo "✅ 缓存恢复成功，文件内容如下："
+          echo "─────────────────────────────"
+          cat ./my-cache/data.json
+          echo ""
+          echo "─────────────────────────────"
+
+      # ─── 3B. 缓存未命中 → 重新写入文件 ─────────────────────────────
+      - name: Write file (cache miss)
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        run: |
+          echo "⚠️ 缓存恢复失败，正在创建新文件..."
+          mkdir -p ./my-cache
+          echo '{"count": 0, "updated_at": "", "note": "initialized"}' > ./my-cache/data.json
+          echo "📄 初始文件已写入："
+          cat ./my-cache/data.json
+
+      # ─── 4. 缓存文件（仅在未命中时执行 save） ─────────────────────
+      - name: Save to cache
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ./my-cache/data.json
+          key: my-cache-key-${{ hashFiles('**/lockfile') }}
+
+      # ─── 5. 调试用：上传 artifact ─────────────────────────────────
+      - name: Upload artifact (debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cached-data
+          path: ./my-cache/data.json
+          retention-days: 7
