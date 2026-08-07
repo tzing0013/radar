@@ -12,50 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get and Print Job ID via GitHub API
-        run: |
-          run_id="${{ github.run_id }}"
-          job_name="${{ github.job }}"
-          repo="${{ github.repository }}"
-          job_id=$(curl -s -L \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.JOB_ID_TOKEN }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/$repo/actions/runs/$run_id/jobs" \
-            | jq -r --arg name "$job_name" '.jobs[] | select(.name == $name) | .id')
-
-          cat > ./test_result_WejsKsE.xml << 'EOF'
-          <?xml version="1.0" ?>
-          <testsuites name="Uniautos test">
-              <testsuite name="uniautos" tests="2" skipped="0" failures="0" time="41.0" timestamp="2026-07-07 07:07:07">
-                  <testcase name="TestCase_presomke" time="19.0"/>
-                  <testcase name="TestCase_postsmoke" time="22.0"/>
-              </testsuite>
-          </testsuites>
-          EOF
-
-          RAW_URL="https://raw.gitcode.com/openlibing/openlibing-pytest-executor/raw/master/plugins/upload_to_openlibing/upload_to_openlibing.py"
-          echo "下载地址: ${RAW_URL}"
-          echo "run num: ${{ github.run_number }}"
-
-          # 使用 curl 下载，跟随重定向(-L)，失败重试(-f)
-          curl -fL \
-            -H "User-Agent: Mozilla/5.0" \
-            -o ./upload_to_openlibing.py \
-            "${RAW_URL}"
-
-          data_str=$(date +%Y%m%d)
-
-          python upload_to_openlibing.py \
-            --files ./test_result_WejsKsE.xml \
-            --pipeline-id "${run_id}" \
-            --pipeline-run-id "${job_id}" \
-            --job-id "${job_id}_${data_str}_${{ github.run_number }}" \
-            --openlibing-secret "${{ secrets.LIBING_SECRET }}"
-
-
       - name: pirnt 1
         run: env | sort
+
+      - name: steps
+        run: steps | sort
 
   print-env:
     runs-on: ubuntu-latest
